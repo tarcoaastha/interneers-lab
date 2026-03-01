@@ -74,6 +74,7 @@ You can verify the changes via **Postman** or a browser:
 
 ## Advance Week1
 A way to layer the project and document it
+`
 backend/
 ├── django_app/          <-- The "Framework" Folder
 │   ├── api/             <-- ADAPTER LAYER (Web/HTTP)
@@ -83,3 +84,4 @@ backend/
 │   ├── urls.py          (The Router)
 │   └── settings.py
 └── manage.py
+`
