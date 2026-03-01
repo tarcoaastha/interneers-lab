@@ -58,7 +58,7 @@ You can verify the changes via **Postman** or a browser:
 
 * **Endpoint:** `http://127.0.0.1:8000/hello/`
 * **Test Case:** `http://127.0.0.1:8000/hello/?name=Interneer`
-* **Expected Result:** `{"message": "Hello, Interneer!"}`
+* **Expected Result:** `{"Message": "Hello, Interneer!"}`
 
 
 ##  Technical Reflections
