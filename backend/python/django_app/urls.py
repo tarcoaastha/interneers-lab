@@ -1,21 +1,11 @@
-# django_app/urls.py
-
-from django.contrib import admin
 from django.urls import path
-from django.http import JsonResponse
-
-def hello_name(request):
-    """
-    A simple view that returns 'Hello, {name}' in JSON format.
-    Uses a query parameter named 'name'.
-    """
-    # Get 'name' from the query string, default to 'World' if missing
-    name = request.GET.get("name", "World")
-    return JsonResponse({"message": f"Hello, {name}!"})
+from . import views  # Importing views 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('hello/', hello_name),
-    # Example usage: /hello/?name=Bob
-    # returns {"message": "Hello, Bob!"}
+
+    path('products/all/', views.get_products_api),
+    path('products/create/', views.create_product_api),
+    
+
+    path('products/<int:p_id>/', views.product_detail_api),
 ]
