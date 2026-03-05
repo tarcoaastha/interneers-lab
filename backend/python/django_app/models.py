@@ -1,17 +1,17 @@
-class Product:
-    def __init__(self, id, name, description, category, price, brand, quantity):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.category = category
-        self.price = price
-        self.brand = brand
-        self.quantity = quantity
+from mongoengine import Document, StringField, FloatField, IntField
+class Product(Document):
+    # MongoEngine will automatically create an '_id' field
+    name = StringField(required=True, max_length=200)
+    description = StringField()
+    category = StringField(max_length=100)
+    price = FloatField(required=True)
+    brand = StringField(max_length=100)
+    quantity = IntField(required=True)
 
     def to_dict(self):
         """Turns the object into a dictionary so Django can send it as JSON"""
         return {
-            "id": self.id,
+            "id": str(self.id),   # Convert ObjectId to string for JSON responses
             "name": self.name,
             "description": self.description,
             "category": self.category,
