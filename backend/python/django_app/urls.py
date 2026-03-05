@@ -7,5 +7,5 @@ urlpatterns = [
     path('products/create/', views.create_product_api),
     
 
-    path('products/<int:p_id>/', views.product_detail_api),
+    path('products/<str:p_id>/', views.product_detail_api),
 ]
