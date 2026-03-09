@@ -1,6 +1,8 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .service import ProductService, ProductCategoryService 
 
 # Initialize our services
@@ -112,3 +114,20 @@ def get_products_by_category_api(request, category_id):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=404)
     return JsonResponse({"error": "Method not allowed"}, status=405)
+@csrf_exempt
+@api_view(['POST'])
+def remove_product_from_category_view(request):
+    """Task 4: POST api to remove a product from its category"""
+    data = request.data
+    p_id = data.get("product_id")
+    
+    if not p_id:
+        return JsonResponse({"error": "product_id is required"}, status=400)
+
+    try:
+        
+        # Use the specific REMOVE function instead of the ADD function
+        updated_product = category_service.remove_product_from_category(p_id)
+        return JsonResponse(updated_product.to_dict(), status=200)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)       
