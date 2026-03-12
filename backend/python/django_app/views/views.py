@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .service import ProductService, ProductCategoryService 
+from ..service.service import ProductService, ProductCategoryService 
 
 # Initialize our services
 product_service = ProductService()

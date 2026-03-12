@@ -1,4 +1,4 @@
-from .repository import ProductRepository, ProductCategoryRepository
+from ..repositories.repository import ProductRepository, ProductCategoryRepository
 import csv
 import io
 class ProductService:

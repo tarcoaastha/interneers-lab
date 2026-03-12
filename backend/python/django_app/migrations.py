@@ -2,12 +2,11 @@ import sys
 import os
 from mongoengine import connect
 
-# 1. Ensure the script can find your models.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from models import Product
+from backend.python.django_app.models.models import Product
 
-# 2. Connect using your root credentials
+print("Connecting...")
 connect(
     db='product_db',
     host='127.0.0.1',
@@ -16,6 +15,9 @@ connect(
     password='example',
     authentication_source='admin'
 )
+
+
+print(f"Connected! DB Names: {Product._get_db().list_collection_names()}")
 
 def migrate_existing_products_add_brand():
     print("Starting Brand Migration...")

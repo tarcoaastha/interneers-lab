@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views  # Importing views 
+from .views import views  # Importing views 
 
 urlpatterns = [
     # --- PRODUCT URLS ---

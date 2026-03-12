@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from mongoengine import NotUniqueError, ValidationError
-from .models import Product, ProductCategory
+from ..models.models import Product, ProductCategory
 class ProductRepository:
     """
     Handles all direct MongoDB operations for the Product collection."""
