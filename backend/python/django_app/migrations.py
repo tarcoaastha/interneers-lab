@@ -4,7 +4,7 @@ from mongoengine import connect
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from backend.python.django_app.models.models import Product
+from django_app.models.models import Product
 
 print("Connecting...")
 connect(
