@@ -29,11 +29,25 @@ def bulk_upload_api(request):
 
 @csrf_exempt
 def get_products_api(request):
+    
     if request.method != "GET":
         return JsonResponse({"error": "Method not allowed"}, status=405)
-    
-    products = product_service.get_all_products()
-    return JsonResponse([p.to_dict() for p in products], safe=False)
+
+    title_filter = request.GET.get('title')
+    sort_filter = request.GET.get('sort')
+    min_p = request.GET.get('min_price')
+    max_p = request.GET.get('max_price')
+
+    try:
+        products = ProductService().get_products(
+            title=title_filter, 
+            sort_by=sort_filter,
+            min_price=min_p,
+            max_price=max_p
+        )
+        return JsonResponse({"products": products}, safe=False, status=200)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
 
 @csrf_exempt
 def create_product_api(request):

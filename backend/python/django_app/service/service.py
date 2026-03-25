@@ -1,3 +1,5 @@
+from turtle import title
+
 from ..repositories.repository import ProductRepository, ProductCategoryRepository
 import csv
 import io
@@ -16,7 +18,7 @@ class ProductService:
             for field in required_fields:
                 if field not in data:
                     raise ValueError(f"Product {field} is required.")# Common validations for both create and update
-        # 2. Universal Logic (Checks any field that IS in the data)
+        # Checks any field that IS in the data
         for field, value in data.items():
             # Check A: Block Nulls or Spaces for strings
             if isinstance(value, str):
@@ -32,16 +34,39 @@ class ProductService:
 
         if data.get("quantity") is not None and data["quantity"] < 0:
             raise ValueError("Quantity cannot be negative.")
+        
     def create_product(self,data):
         self.validate_product_data(data)
         return self.product_repo.create(data)
-    def get_all_products(self):
-        return self.product_repo.get_all()
+    
+    def get_products(self, title=None, sort_by=None, min_price=None, max_price=None):
+        query = self.product_repo.get_all()
+        if title and title.strip():
+            query = query.filter(title__exists=True, title__ne=None, title__icontains=title)
+        if min_price:
+            query = query.filter(price__gte=float(min_price))
+        if max_price:
+            query = query.filter(price__lte=float(max_price))
+        if sort_by == "price_low":
+            query = query.order_by('price')
+        elif sort_by == "price_high":
+            query = query.order_by('-price')
+        else:
+            query = query.order_by('-created_at')
+        return [p.to_dict() for p in query]
+    
     def delete_product_by_id(self, p_id):
         return self.product_repo.delete(p_id)
+    
     def update_product_by_id(self,p_id, data):
-        self.validate_product_data(data, is_update=True)
-        return self.product_repo.update(p_id, data)
+        try:    
+            self.validate_product_data(data, is_update=True)
+            updated_product = self.product_repo.update(p_id, data)
+            if not updated_product:
+                raise ValueError(f"Product with ID {p_id} not found.")
+            return updated_product
+        except Exception as e:
+            raise Exception(f"Error updating product: {str(e)}")
     def get_product_by_id(self, p_id):
         return self.product_repo.get_by_id(p_id)
     
@@ -89,18 +114,12 @@ class ProductCategoryService:
 
     def create_new_category(self, data):
         """Task 1: Business logic for creating a category"""
-        # We can add extra rules here, like stripping whitespace
-        if 'title' in data:
-            data['title'] = data['title'].strip()
-            
         if not data.get('title'):
             raise Exception("Category title cannot be empty.")
-            
+        if 'title' in data:
+            data['title'] = data['title'].strip()  
         return self.category_repo.create_category(data)
-    def add_product_to_category(self, product_id, category_id):
-        # We update the Product to point to this Category
-        # We use the product_repo to handle the update
-        return self.product_repo.update(product_id, {"category": category_id})
+    
     def list_all_categories(self):
         """Task 3: Logic for fetching the list of all categories"""
         return self.category_repo.get_all_categories()
@@ -117,18 +136,16 @@ class ProductCategoryService:
     
     def add_product_to_category(self, product_id, category_id):
         """Task 4: Links a product to a specific category"""
-        # 1. Verify the category exists
+        # Verify the category exists
         category = self.category_repo.get_category_by_id(category_id)
         if not category:
             raise Exception("Category not found.")
-
-        # 2. Verify the product exists
+        # Verify the product exists
         product = self.product_repo.get_by_id(product_id)
         if not product:
             raise Exception("Product not found.")
-
-        # 3. Update the product's category field and save
-        # We use the product_repo's update method to keep things clean
+        # Update the product's category field and save
+        # using the product_repo's update method
         updated_product = self.product_repo.update(product_id, {"category": category})
         return updated_product
 
@@ -137,7 +154,6 @@ class ProductCategoryService:
         product = self.product_repo.get_by_id(product_id)
         if not product:
             raise Exception("Product not found.")
-
         # Set category to None to break the link
         updated_product = self.product_repo.update(product_id, {"category": None})
         return updated_product

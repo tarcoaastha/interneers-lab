@@ -13,7 +13,7 @@ class ProductRepository:
     
     def get_all(self):
         """Retrieves all products from the database"""
-        return Product.objects().all().order_by('-created_at')  # Sort by creation time, newest first
+        return Product.objects() 
     
     def get_by_id(self, product_id):
         """Retrieves a product by its ID"""
