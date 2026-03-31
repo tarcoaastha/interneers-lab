@@ -11,7 +11,7 @@ class ProductService:
         Helper function to validate product input.
         If is_update is True, we might allow missing fields.
         """    
-        required_fields = ["name", "price", "quantity", "brand"]
+        required_fields = ["title", "price", "quantity", "brand"]
         # For a new product, name, price, and quantity are mandatory
     
         if not is_update:
@@ -88,7 +88,7 @@ class ProductService:
                 clean_row = {k.strip(): v for k, v in row.items() if k}
                 
                 product_data = {
-                    "name": clean_row.get("name"),
+                    "title": clean_row.get("title") or clean_row.get("name"),
                     "price": float(clean_row.get("price", 0)),
                     "quantity": int(clean_row.get("quantity", 0)),
                     "brand": clean_row.get("brand"),
