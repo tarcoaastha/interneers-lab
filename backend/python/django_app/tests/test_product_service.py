@@ -1,7 +1,7 @@
 # import unittest
 # from unittest.mock import MagicMock, patch
 # from django_app.service.service import ProductService
-
+#commented out old unittest code in favor of pytest style tests with fixtures and parameterization
 # class TestProductService(unittest.TestCase):
 
 #     @patch('django_app.service.service.ProductRepository')
