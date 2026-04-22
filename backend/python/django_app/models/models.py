@@ -18,7 +18,6 @@ class ProductCategory(Document):
     
 class Product(Document):
     # MongoEngine will automatically create an '_id' field
-    name = StringField(required=True, max_length=200)
     title = StringField(required=True, max_length=100)
     description = StringField()
     price = FloatField(required=True)
@@ -42,7 +41,6 @@ class Product(Document):
             category_title = "Missing Category"
         return {
             "id": str(self.id),   # Convert ObjectId to string for JSON responses
-            "name": self.name,
             "title": self.title,
             "description": self.description,
             "category": category_title,
